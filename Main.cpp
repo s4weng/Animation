@@ -10,53 +10,39 @@ int main()
     window.setFramerateLimit(60);
 
     // load texture (spritesheet)
-    sf::Texture texture;
-    if (!texture.loadFromFile("ArcherWalking.png"))
-    {
+    sf::Texture textureWalk, textureStand;
+    if (!textureWalk.loadFromFile("ArcherWalk.png") || !textureStand.loadFromFile("ArcherStand.png")){
         std::cout << "Failed to load player spritesheet!" << std::endl;
         return 1;
     }
 
     // set up the animations for all four directions (set spritesheet and push frames)
-    /*Animation walkingAnimationDown;
-    walkingAnimationDown.setSpriteSheet(texture);
-    walkingAnimationDown.addFrame(sf::IntRect(32, 0, 32, 32));
-    walkingAnimationDown.addFrame(sf::IntRect(64, 0, 32, 32));
-    walkingAnimationDown.addFrame(sf::IntRect(32, 0, 32, 32));
-    walkingAnimationDown.addFrame(sf::IntRect( 0, 0, 32, 32));*/
+    Animation walkingAnimationRight;
+    walkingAnimationRight.setSpriteSheet(textureWalk);
+    walkingAnimationRight.addFrame(sf::IntRect(11, 11, 48, 70));
+    walkingAnimationRight.addFrame(sf::IntRect(91, 12, 48, 70));
+    walkingAnimationRight.addFrame(sf::IntRect(167, 8, 48, 70));
+    walkingAnimationRight.addFrame(sf::IntRect(248, 10, 48, 70));
+    walkingAnimationRight.addFrame(sf::IntRect(329, 10, 48, 70));
 
     Animation walkingAnimationLeft;
-    walkingAnimationLeft.setSpriteSheet(texture);
-    walkingAnimationLeft.addFrame(sf::IntRect(0, 85, 80, 85));
-    walkingAnimationLeft.addFrame(sf::IntRect(80, 85, 81, 85));
-    walkingAnimationLeft.addFrame(sf::IntRect(161, 85, 81, 85));
-    walkingAnimationLeft.addFrame(sf::IntRect(242, 85, 81, 85));
-    walkingAnimationLeft.addFrame(sf::IntRect(323, 85, 81, 85));
-    walkingAnimationLeft.addFrame(sf::IntRect(404, 85, 81, 85));
-    walkingAnimationLeft.addFrame(sf::IntRect(485, 85, 81, 85));
-    walkingAnimationLeft.addFrame(sf::IntRect(566, 85, 81, 85));
-    walkingAnimationLeft.addFrame(sf::IntRect(647, 85, 81, 85));
+    walkingAnimationLeft.setSpriteSheet(textureWalk);
+    walkingAnimationLeft.addFrame(sf::IntRect(330, 97, 48, 70));
+    walkingAnimationLeft.addFrame(sf::IntRect(246, 97, 48, 70));
+    walkingAnimationLeft.addFrame(sf::IntRect(172, 97, 48, 70));
+    walkingAnimationLeft.addFrame(sf::IntRect(93, 97, 48, 70));
+    walkingAnimationLeft.addFrame(sf::IntRect(9, 95, 48, 70));
 
-    Animation walkingAnimationRight;
-    walkingAnimationRight.setSpriteSheet(texture);
-    walkingAnimationRight.addFrame(sf::IntRect(0, 0, 80, 85));
-    walkingAnimationRight.addFrame(sf::IntRect(80, 0, 81, 85));
-    walkingAnimationRight.addFrame(sf::IntRect(161, 0, 81, 85));
-    walkingAnimationRight.addFrame(sf::IntRect(242, 0, 81, 85));
-    walkingAnimationRight.addFrame(sf::IntRect(323, 0, 81, 85));
-    walkingAnimationRight.addFrame(sf::IntRect(404, 0, 81, 85));
-    walkingAnimationRight.addFrame(sf::IntRect(485, 0, 81, 85));
-    walkingAnimationRight.addFrame(sf::IntRect(566, 0, 81, 85));
-    walkingAnimationRight.addFrame(sf::IntRect(647, 0, 81, 85));
+    Animation standingDefaultRight;
+    standingDefaultRight.setSpriteSheet(textureStand);
+    standingDefaultRight.addFrame(sf::IntRect(9,9,48,70));
 
-    /*Animation walkingAnimationUp;
-    walkingAnimationUp.setSpriteSheet(texture);
-    walkingAnimationUp.addFrame(sf::IntRect(32, 96, 32, 32));
-    walkingAnimationUp.addFrame(sf::IntRect(64, 96, 32, 32));
-    walkingAnimationUp.addFrame(sf::IntRect(32, 96, 32, 32));
-    walkingAnimationUp.addFrame(sf::IntRect( 0, 96, 32, 32));*/
+    Animation standingDefaultLeft;
+    standingDefaultLeft.setSpriteSheet(textureStand);
+    standingDefaultLeft.addFrame(sf::IntRect(10,98,48,70));
 
-    Animation* currentAnimation = &walkingAnimationRight;
+
+    Animation* currentAnimation = &standingDefaultRight;
 
     // set up AnimatedSprite
     AnimatedSprite animatedSprite(sf::seconds(0.2), true, false);
@@ -66,6 +52,7 @@ int main()
 
     float speed = 80.f;
     bool noKeyWasPressed = true;
+    int direction = 1; //1 for right, 0 for left
 
     while (window.isOpen())
     {
@@ -82,38 +69,37 @@ int main()
 
         // if a key was pressed set the correct animation and move correctly
         sf::Vector2f movement(0.f, 0.f);
-        /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-        {
-            currentAnimation = &walkingAnimationUp;
-            movement.y -= speed;
-            noKeyWasPressed = false;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        {
-            currentAnimation = &walkingAnimationDown;
-            movement.y += speed;
-            noKeyWasPressed = false;
-        }*/
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        {
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+
             currentAnimation = &walkingAnimationLeft;
             movement.x -= speed;
             noKeyWasPressed = false;
+            direction = 0;
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        {
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+
             currentAnimation = &walkingAnimationRight;
             movement.x += speed;
             noKeyWasPressed = false;
+            direction = 1;
         }
+
         animatedSprite.play(*currentAnimation);
         animatedSprite.move(movement * frameTime.asSeconds());
 
         // if no key was pressed stop the animation
-        if (noKeyWasPressed)
-        {
+        if (noKeyWasPressed){
+
+        	if (direction == 1)
+        		currentAnimation = &standingDefaultRight;
+        	else
+        		currentAnimation = &standingDefaultLeft;
+
             animatedSprite.stop();
         }
+
         noKeyWasPressed = true;
 
         // update AnimatedSprite
