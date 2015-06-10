@@ -55,9 +55,13 @@ void AnimatedSprite::play()
 
 void AnimatedSprite::play(const Animation& animation, bool flip)
 {
-    this->flip = flip;
-    if (getAnimation() != &animation)
+
+    if (getAnimation() != &animation || this->flip != flip){
+
+        this->flip = flip;
         setAnimation(animation);
+    }
+
     play();
 }
 

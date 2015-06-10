@@ -25,22 +25,9 @@ int main()
     walkingAnimationRight.addFrame(sf::IntRect(248, 10, 48, 70));
     walkingAnimationRight.addFrame(sf::IntRect(329, 10, 48, 70));
 
-    /*Animation walkingAnimationLeft;
-    walkingAnimationLeft.setSpriteSheet(textureWalk);
-    walkingAnimationLeft.addFrame(sf::IntRect(330, 97, 48, 70));
-    walkingAnimationLeft.addFrame(sf::IntRect(246, 97, 48, 70));
-    walkingAnimationLeft.addFrame(sf::IntRect(172, 97, 48, 70));
-    walkingAnimationLeft.addFrame(sf::IntRect(93, 97, 48, 70));
-    walkingAnimationLeft.addFrame(sf::IntRect(9, 95, 48, 70));*/
-
     Animation standingDefaultRight;
     standingDefaultRight.setSpriteSheet(textureStand);
     standingDefaultRight.addFrame(sf::IntRect(9,9,48,70));
-
-    /*Animation standingDefaultLeft;
-    standingDefaultLeft.setSpriteSheet(textureStand);
-    standingDefaultLeft.addFrame(sf::IntRect(10,98,48,70));*/
-
 
     Animation* currentAnimation = &standingDefaultRight;
 
@@ -92,11 +79,7 @@ int main()
         // if no key was pressed stop the animation
         if (noKeyWasPressed){
 
-        	//if (direction == 1)
-        		currentAnimation = &standingDefaultRight;
-        	//else
-        	//	currentAnimation = &standingDefaultLeft;
-
+        	currentAnimation = &standingDefaultRight;
             animatedSprite.stop();
         }
 
