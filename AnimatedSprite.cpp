@@ -21,10 +21,16 @@
 //
 ////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////
+//This copy has been modified by Steve Weng (aka. github.com/s4weng)
+//to support the ability to flip a sprite.
+////////////////////////////////////////////////////////////
+
+
 #include "AnimatedSprite.hpp"
 
 AnimatedSprite::AnimatedSprite(sf::Time frameTime, bool paused, bool looped) :
-    m_animation(NULL), m_frameTime(frameTime), m_currentFrame(0), m_isPaused(paused), m_isLooped(looped), m_texture(NULL)
+    m_animation(NULL), m_frameTime(frameTime), m_currentFrame(0), m_isPaused(paused), m_isLooped(looped), m_texture(NULL), flip(false)
 {
 
 }
@@ -47,8 +53,9 @@ void AnimatedSprite::play()
     m_isPaused = false;
 }
 
-void AnimatedSprite::play(const Animation& animation)
+void AnimatedSprite::play(const Animation& animation, bool flip)
 {
+    this->flip = flip;
     if (getAnimation() != &animation)
         setAnimation(animation);
     play();
@@ -132,14 +139,25 @@ void AnimatedSprite::setFrame(std::size_t newFrame, bool resetTime)
         float top = static_cast<float>(rect.top);
         float bottom = top + static_cast<float>(rect.height);
 
-        m_vertices[0].texCoords = sf::Vector2f(left, top);
-        m_vertices[1].texCoords = sf::Vector2f(left, bottom);
-        m_vertices[2].texCoords = sf::Vector2f(right, bottom);
-        m_vertices[3].texCoords = sf::Vector2f(right, top);
+        if (flip){
+
+            m_vertices[3].texCoords = sf::Vector2f(left, top);
+            m_vertices[2].texCoords = sf::Vector2f(left, bottom);
+            m_vertices[1].texCoords = sf::Vector2f(right, bottom);
+            m_vertices[0].texCoords = sf::Vector2f(right, top);
+        }
+
+        else {
+
+            m_vertices[0].texCoords = sf::Vector2f(left, top);
+            m_vertices[1].texCoords = sf::Vector2f(left, bottom);
+            m_vertices[2].texCoords = sf::Vector2f(right, bottom);
+            m_vertices[3].texCoords = sf::Vector2f(right, top);
     }
 
     if (resetTime)
         m_currentTime = sf::Time::Zero;
+        }
 }
 
 void AnimatedSprite::update(sf::Time deltaTime)

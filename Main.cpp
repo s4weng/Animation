@@ -25,21 +25,21 @@ int main()
     walkingAnimationRight.addFrame(sf::IntRect(248, 10, 48, 70));
     walkingAnimationRight.addFrame(sf::IntRect(329, 10, 48, 70));
 
-    Animation walkingAnimationLeft;
+    /*Animation walkingAnimationLeft;
     walkingAnimationLeft.setSpriteSheet(textureWalk);
     walkingAnimationLeft.addFrame(sf::IntRect(330, 97, 48, 70));
     walkingAnimationLeft.addFrame(sf::IntRect(246, 97, 48, 70));
     walkingAnimationLeft.addFrame(sf::IntRect(172, 97, 48, 70));
     walkingAnimationLeft.addFrame(sf::IntRect(93, 97, 48, 70));
-    walkingAnimationLeft.addFrame(sf::IntRect(9, 95, 48, 70));
+    walkingAnimationLeft.addFrame(sf::IntRect(9, 95, 48, 70));*/
 
     Animation standingDefaultRight;
     standingDefaultRight.setSpriteSheet(textureStand);
     standingDefaultRight.addFrame(sf::IntRect(9,9,48,70));
 
-    Animation standingDefaultLeft;
+    /*Animation standingDefaultLeft;
     standingDefaultLeft.setSpriteSheet(textureStand);
-    standingDefaultLeft.addFrame(sf::IntRect(10,98,48,70));
+    standingDefaultLeft.addFrame(sf::IntRect(10,98,48,70));*/
 
 
     Animation* currentAnimation = &standingDefaultRight;
@@ -72,7 +72,7 @@ int main()
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
 
-            currentAnimation = &walkingAnimationLeft;
+            currentAnimation = &walkingAnimationRight;
             movement.x -= speed;
             noKeyWasPressed = false;
             direction = 0;
@@ -86,16 +86,16 @@ int main()
             direction = 1;
         }
 
-        animatedSprite.play(*currentAnimation);
+        direction ? animatedSprite.play(*currentAnimation) : animatedSprite.play(*currentAnimation, true);
         animatedSprite.move(movement * frameTime.asSeconds());
 
         // if no key was pressed stop the animation
         if (noKeyWasPressed){
 
-        	if (direction == 1)
+        	//if (direction == 1)
         		currentAnimation = &standingDefaultRight;
-        	else
-        		currentAnimation = &standingDefaultLeft;
+        	//else
+        	//	currentAnimation = &standingDefaultLeft;
 
             animatedSprite.stop();
         }

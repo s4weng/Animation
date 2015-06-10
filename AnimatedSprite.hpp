@@ -21,6 +21,11 @@
 //
 ////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////
+//This copy has been modified by Steve Weng (aka. github.com/s4weng)
+//to support the ability to flip a sprite.
+////////////////////////////////////////////////////////////
+
 #ifndef ANIMATEDSPRITE_INCLUDE
 #define ANIMATEDSPRITE_INCLUDE
 
@@ -41,7 +46,7 @@ public:
     void setAnimation(const Animation& animation);
     void setFrameTime(sf::Time time);
     void play();
-    void play(const Animation& animation);
+    void play(const Animation& animation, bool flip = false);
     void pause();
     void stop();
     void setLooped(bool looped);
@@ -63,6 +68,7 @@ private:
     bool m_isLooped;
     const sf::Texture* m_texture;
     sf::Vertex m_vertices[4];
+    int flip;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
